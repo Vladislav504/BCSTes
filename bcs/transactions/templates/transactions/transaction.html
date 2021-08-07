@@ -1,0 +1,8 @@
+<h1>Transaction ID: {{ tx.id }}</h1>
+<p>Description:
+{% if tx.description %}
+    {{ tx.description }}
+{% else %}
+    No description.
+{% endif %}
+</p>
