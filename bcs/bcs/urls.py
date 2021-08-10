@@ -21,5 +21,5 @@ from transactions.views import TransactionsView, TransactionView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TransactionsView.as_view()),
-    path('<str:tx_id>', TransactionView.as_view()),
+    path('tx/<str:tx_id>', TransactionView.as_view()),
 ]
