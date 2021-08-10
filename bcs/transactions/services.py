@@ -10,7 +10,7 @@ from .exceptions import InsufficientFunds, RequestError
 class NetworkService:
     network: Network = get_base_network()
     coin_mul: int = 1e8
-    fee: int = int(settings.STANDARD_FEE)
+    fee: float = float(settings.STANDARD_FEE)
     wif: str = settings.PRIVATE_KEY
     my_address: str = settings.BCS_ADDRESS
 
