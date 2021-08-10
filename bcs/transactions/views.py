@@ -1,26 +1,43 @@
+import json
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.shortcuts import render
-import requests
 
 from .models import Transaction
-from .services import get_new_address
-from base.services import get_base_network
+from .services import RequestError, NetworkService, send_raw_transaction
+from .exceptions import RequestError, InsufficientFunds
 
 
 class TransactionsView(TemplateView):
     template_name = 'transactions.html'
 
-    def get(self, request):
+    @property
+    def context(self):
         query = Transaction.objects.all()
-        context = {'transactions': query}
+        return {'transactions': query}
+
+    def get(self, request):
         return render(request,
                       f'transactions/{self.template_name}',
-                      context=context)
+                      context=self.context)
+
+    def create_tx(self):
+        tx = NetworkService.create_signed_tx_for_new_address(coins=1)
+        tx_hex = tx.as_hex()
+        return send_raw_transaction([tx_hex])
 
     def post(self, request):
-        new_address = get_new_address()
-        network = get_base_network()
+        try:
+            result = self.create_tx()
+            Transaction(id=result).save()
+            message = 'Transaction has been sent successfully.'
+        except RequestError as e:
+            message = str(e)
+        except InsufficientFunds:
+            message = 'Not enough coins to make Transaction.'
+        
+        context = self.context
+        context['message'] = message
         return HttpResponseRedirect('/')
 
 
@@ -30,13 +47,10 @@ class TransactionView(TemplateView):
     def get(self, request, tx_id):
         try:
             tx = Transaction.objects.get(id=tx_id)
-            print(tx)
             return render(request,
                           f'transactions/{self.template_name}',
                           context={'tx': tx})
         except Transaction.DoesNotExist:
-            return render(
-                request,
-                f'transactions/404.html',
-                context={"id": tx_id}
-            )
+            return render(request,
+                          f'transactions/404.html',
+                          context={"id": tx_id})

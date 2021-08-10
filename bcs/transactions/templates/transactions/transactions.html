@@ -1,10 +1,17 @@
-<form action="/" method="post">
+{% extends 'base/base.html' %} {% block content %}
+<div>
+  <form action="/" method="post">
     {% csrf_token %}
-     <button>Отправить транзакцию</button>
-</form>
+    <button>Отправить транзакцию</button>
+  </form>
+  <ul>
+    {% for transaction in transactions %}
 
-<ul>
-{% for transaction in transactions %}
     <li>{{transaction.id}}</li>
-{% endfor %}
-</ul>
+    {% endfor %}
+  </ul>
+
+  {% if message %}
+  <h2>{{message}}</h2>
+  {% endif %} {% endblock %}
+</div>
