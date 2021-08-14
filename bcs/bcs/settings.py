@@ -118,7 +118,7 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+import os
 import environ
 env = environ.Env()
 
@@ -126,25 +126,14 @@ env = environ.Env()
 environ.Env.read_env()
 
 # False if not in os.environ
-DEBUG = env('DEBUG')
+DEBUG = os.environ['DEBUG']
 
 BCS_ADDRESS = env('BCS_ADDRESS')
-PRIVATE_KEY = env('PRIVATE_KEY')
-RPC_URL = env('RPC_URL')
+PRIVATE_KEY = os.environ['PRIVATE_KEY']
+RPC_URL = os.environ['RPC_URL']
 BCS_API = env('BCS_API')
 STANDARD_FEE = env('STANDARD_FEE')
-SECRET_KEY = env('SECRET_KEY')
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': env('DBNAME'),
-        'USER': env('DBUSER'),
-        'PASSWORD': env('DBPASS'),
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
+SECRET_KEY = os.environ['SECRET_KEY']
 
 django_heroku.settings(locals())
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
