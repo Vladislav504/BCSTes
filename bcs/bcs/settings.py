@@ -120,17 +120,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 import os
 import environ
+import os
 env = environ.Env()
 
 # reading .env file
 environ.Env.read_env()
 
 # False if not in os.environ
-DEBUG = os.environ['DEBUG']
+DEBUG = 'True' == os.environ['DEBUG']
 
 BCS_ADDRESS = env('BCS_ADDRESS')
 PRIVATE_KEY = os.environ['PRIVATE_KEY']
-RPC_URL = os.environ['RPC_URL']
+RPC_URL = env('RPC_URL')
 BCS_API = env('BCS_API')
 STANDARD_FEE = env('STANDARD_FEE')
 SECRET_KEY = os.environ['SECRET_KEY']
