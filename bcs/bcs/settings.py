@@ -131,7 +131,7 @@ DEBUG = 'True' == os.environ['DEBUG']
 
 BCS_ADDRESS = env('BCS_ADDRESS')
 PRIVATE_KEY = os.environ['PRIVATE_KEY']
-RPC_URL = env('RPC_URL')
+RPC_URL = os.environ['RPC_URL']
 BCS_API = env('BCS_API')
 STANDARD_FEE = env('STANDARD_FEE')
 SECRET_KEY = os.environ['SECRET_KEY']
